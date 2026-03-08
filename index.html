@@ -1,1 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Noctivis</title>
+  <style>
+    /* Basic Reset */
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Arial', sans-serif; }
 
+    body {
+      background-color: #000;
+      color: #eee;
+      scroll-behavior: smooth;
+    }
+
+    a { color: #39f; text-decoration: none; }
+    a:hover { color: #6bf; }
+
+    /* Navigation */
+    nav {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background-color: rgba(0,0,0,0.9);
+      display: flex;
+      justify-content: center;
+      padding: 15px 0;
+      z-index: 1000;
+    }
+
+    nav a {
+      margin: 0 20px;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    /* Sections */
+    section {
+      min-height: 100vh;
+      padding: 100px 20px 50px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
+    h1, h2 {
+      color: #39f;
+      margin-bottom: 20px;
+    }
+
+    p {
+      max-width: 700px;
+      line-height: 1.6;
+      color: #ccc;
+    }
+
+    /* Home Section */
+    #home h1 { font-size: 3em; }
+    #home p { font-size: 1.2em; }
+
+    /* Gallery */
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      width: 90%;
+      max-width: 1000px;
+    }
+
+    .gallery img {
+      width: 100%;
+      border: 2px solid #39f;
+      border-radius: 8px;
+      transition: transform 0.3s, box-shadow 0.3s;
+      cursor: pointer;
+    }
+
+    .gallery img:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 20px #39f;
+    }
+
+    /* Contact */
+    #contact a {
+      display: inline-block;
+      margin-top: 15px;
+      background-color: #39f;
+      padding: 10px 20px;
+      border-radius: 5px;
+      transition: background 0.3s;
+    }
+
+    #contact a:hover { background-color: #6bf; }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 20px;
+      color: #555;
+      font-size: 0.9em;
+    }
+
+    /* Smooth Scroll Offset for Fixed Nav */
+    section:before {
+      content: "";
+      display: block;
+      height: 70px;
+      margin-top: -70px;
+      visibility: hidden;
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav>
+    <a href="#home">Home</a>
+    <a href="#gallery">Gallery</a>
+    <a href="#about">About</a>
+    <a href="#contact">Contact</a>
+  </nav>
+
+  <!-- Home Section -->
+  <section id="home">
+    <h1>Noctivis</h1>
+    <p>Vision in the Shadows. Welcome to my art portfolio, where I explore mood, shadow, and light through creative expression.</p>
+  </section>
+
+  <!-- Gallery Section -->
+  <section id="gallery">
+    <h2>Recent Work</h2>
+    <div class="gallery">
+      <!-- Add your images here -->
+      <img src="images/art1.jpg" alt="Art piece 1">
+      <img src="images/art2.jpg" alt="Art piece 2">
+      <img src="images/art3.jpg" alt="Art piece 3">
+    </div>
+  </section>
+
+  <!-- About Section -->
+  <section id="about">
+    <h2>About Me</h2>
+    <p>Hi, I’m Hoka, the creator behind Noctivis. I work primarily with graphite and mixed media, exploring the contrasts of light and shadow. My goal is to create art that evokes emotion and tells a story beyond what the eye first sees.</p>
+  </section>
+
+  <!-- Contact Section -->
+  <section id="contact">
+    <h2>Contact</h2>
+    <p>If you’d like to reach out for commissions, collaborations, or just to say hi, feel free to email me:</p>
+    <a href="mailto: hokadagoat@gmail.com">Email Me</a>
+  </section>
+
+  <footer>
+    &copy; 2026 Noctivis. All rights reserved.
+  </footer>
+
+</body>
+</html>
