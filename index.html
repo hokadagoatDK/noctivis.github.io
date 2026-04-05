@@ -15,7 +15,6 @@
     justify-content: center;
     align-items: center;
     height: 100vh;
-    transition: background 0.5s ease;
   }
   h1 {
     font-size: 2em;
@@ -48,7 +47,7 @@
     width: 100%; height: 100%;
     border-radius: 50%;
     background: conic-gradient(#C277FF 0deg, #4B0082 0deg 360deg);
-    transition: background 0.3s linear;
+    transition: background 0.2s linear;
   }
   .prompt {
     margin-top: 20px;
@@ -87,8 +86,8 @@
   const promptDisplay = document.getElementById('prompt');
   const progressRing = document.getElementById('progressRing');
 
-  let totalTime = 120; // seconds
-  let timeLeft = totalTime;
+  const totalTime = 120; // seconds
+  let startTime = null;
   let interval = null;
   let running = false;
 
@@ -99,22 +98,21 @@
     "Gums & finishing touches"
   ];
 
-  function updateTimerDisplay(seconds) {
-    const mins = Math.floor(seconds / 60);
-    const secs = seconds % 60;
+  function updateTimerDisplay(secondsLeft) {
+    const mins = Math.floor(secondsLeft / 60);
+    const secs = secondsLeft % 60;
     timerDisplay.textContent = `${mins}:${secs < 10 ? '0' : ''}${secs}`;
   }
 
   function updatePrompt(section) {
     if (section < prompts.length) {
       promptDisplay.textContent = prompts[section];
-      const color = section % 2 === 0 ? '#C277FF' : '#4B0082';
-      promptDisplay.style.color = color;
+      promptDisplay.style.color = section % 2 === 0 ? '#C277FF' : '#4B0082';
     }
   }
 
-  function updateProgressRing() {
-    const progress = ((totalTime - timeLeft) / totalTime) * 360;
+  function updateProgressRing(secondsElapsed) {
+    const progress = (secondsElapsed / totalTime) * 360;
     progressRing.style.background = `conic-gradient(#C277FF ${progress}deg, #4B0082 ${progress}deg 360deg)`;
   }
 
@@ -122,33 +120,40 @@
     if (!running) {
       running = true;
       startBtn.textContent = "Stop Brushing";
-      interval = setInterval(() => {
-        timeLeft--;
-        updateTimerDisplay(timeLeft);
-        updateProgressRing();
-        const section = Math.floor((totalTime - timeLeft) / 30);
-        if ((totalTime - timeLeft) % 30 === 0 && timeLeft !== totalTime) updatePrompt(section);
-        if (timeLeft <= 0) {
-          clearInterval(interval);
-          promptDisplay.textContent = "Brushing complete";
-          startBtn.textContent = "Start Brushing";
-          running = false;
-          timeLeft = totalTime;
-          updateTimerDisplay(timeLeft);
-          updateProgressRing();
-        }
-      }, 1000);
+      startTime = Date.now();
+      interval = requestAnimationFrame(tick);
       updatePrompt(0);
     } else {
-      // Stop button resets the timer
+      // Reset timer when stopping
       running = false;
-      clearInterval(interval);
-      timeLeft = totalTime;
-      updateTimerDisplay(timeLeft);
-      updateProgressRing();
+      cancelAnimationFrame(interval);
+      timerDisplay.textContent = "2:00";
+      progressRing.style.background = `conic-gradient(#C277FF 0deg, #4B0082 0deg 360deg)`;
       promptDisplay.textContent = "Press Start to begin";
       startBtn.textContent = "Start Brushing";
     }
+  }
+
+  function tick() {
+    const now = Date.now();
+    const elapsed = Math.floor((now - startTime) / 1000);
+    const secondsLeft = totalTime - elapsed;
+
+    if (secondsLeft <= 0) {
+      timerDisplay.textContent = "0:00";
+      updateProgressRing(totalTime);
+      promptDisplay.textContent = "Brushing complete";
+      startBtn.textContent = "Start Brushing";
+      running = false;
+      return;
+    }
+
+    updateTimerDisplay(secondsLeft);
+    updateProgressRing(elapsed);
+    const section = Math.floor(elapsed / 30);
+    updatePrompt(section);
+
+    interval = requestAnimationFrame(tick);
   }
 
   startBtn.addEventListener('click', startStopTimer);
