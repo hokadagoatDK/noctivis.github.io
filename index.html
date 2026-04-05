@@ -1,163 +1,148 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Noctivis</title>
-  <style>
-    /* Basic Reset */
-    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Arial', sans-serif; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BrushFlow</title>
+<style>
+  /* --- Reset & Body --- */
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #000;
+    color: #8A2BE2;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
 
-    body {
-      background-color: #000;
-      color: #eee;
-      scroll-behavior: smooth;
-    }
+  /* --- Timer Circle --- */
+  .timer-container {
+    position: relative;
+    width: 250px;
+    height: 250px;
+    margin: 20px;
+  }
 
-    a { color: #39f; text-decoration: none; }
-    a:hover { color: #6bf; }
+  .circle {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    border: 4px solid #8A2BE2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2em;
+    position: relative;
+  }
 
-    /* Navigation */
-    nav {
-      position: fixed;
-      top: 0;
-      width: 100%;
-      background-color: rgba(0,0,0,0.9);
-      display: flex;
-      justify-content: center;
-      padding: 15px 0;
-      z-index: 1000;
-    }
+  .progress-ring {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    border-radius: 50%;
+    clip: rect(0px, 250px, 250px, 125px);
+  }
 
-    nav a {
-      margin: 0 20px;
-      font-weight: bold;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
+  .progress-ring-fill {
+    position: absolute;
+    width: 100%; height: 100%;
+    border-radius: 50%;
+    border: 4px solid #8A2BE2;
+    clip: rect(0px, 125px, 250px, 0px);
+    transform: rotate(0deg);
+    transform-origin: center;
+    transition: transform 0.3s linear;
+  }
 
-    /* Sections */
-    section {
-      min-height: 100vh;
-      padding: 100px 20px 50px 20px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-    }
+  /* --- Text Prompt --- */
+  .prompt {
+    margin-top: 20px;
+    font-size: 1.5em;
+    text-align: center;
+  }
 
-    h1, h2 {
-      color: #39f;
-      margin-bottom: 20px;
-    }
+  /* --- Buttons --- */
+  button {
+    margin-top: 30px;
+    padding: 15px 40px;
+    font-size: 1em;
+    color: #000;
+    background-color: #8A2BE2;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+  }
 
-    p {
-      max-width: 700px;
-      line-height: 1.6;
-      color: #ccc;
-    }
+  button:hover {
+    opacity: 0.8;
+  }
 
-    /* Home Section */
-    #home h1 { font-size: 3em; }
-    #home p { font-size: 1.2em; }
-
-    /* Gallery */
-    .gallery {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 15px;
-      width: 90%;
-      max-width: 1000px;
-    }
-
-    .gallery img {
-      width: 100%;
-      border: 2px solid #39f;
-      border-radius: 8px;
-      transition: transform 0.3s, box-shadow 0.3s;
-      cursor: pointer;
-    }
-
-    .gallery img:hover {
-      transform: scale(1.05);
-      box-shadow: 0 0 20px #39f;
-    }
-
-    /* Contact */
-    #contact a {
-      display: inline-block;
-      margin-top: 15px;
-      background-color: #39f;
-      padding: 10px 20px;
-      border-radius: 5px;
-      transition: background 0.3s;
-    }
-
-    #contact a:hover { background-color: #6bf; }
-
-    /* Footer */
-    footer {
-      text-align: center;
-      padding: 20px;
-      color: #555;
-      font-size: 0.9em;
-    }
-
-    /* Smooth Scroll Offset for Fixed Nav */
-    section:before {
-      content: "";
-      display: block;
-      height: 70px;
-      margin-top: -70px;
-      visibility: hidden;
-    }
-
-  </style>
+</style>
 </head>
 <body>
 
-  <!-- Navigation -->
-  <nav>
-    <a href="#home">Home</a>
-    <a href="#gallery">Gallery</a>
-    <a href="#about">About</a>
-    <a href="#contact">Contact</a>
-  </nav>
+<h1>BrushFlow</h1>
 
-  <!-- Home Section -->
-  <section id="home">
-    <h1>Noctivis</h1>
-    <p>Vision in the Shadows. Welcome to my art portfolio, where I explore mood, shadow, and light through creative expression.</p>
-  </section>
+<div class="timer-container">
+  <div class="circle" id="timer">2:00</div>
+</div>
 
-  <!-- Gallery Section -->
-  <section id="gallery">
-    <h2>Recent Work</h2>
-    <div class="gallery">
-      <!-- Add your images here -->
-      <img src="images/art1.jpg" alt="Art piece 1">
-      <img src="images/art2.jpg" alt="Art piece 2">
-      <img src="images/art3.jpg" alt="Art piece 3">
-    </div>
-  </section>
+<div class="prompt" id="prompt">Press Start to begin</div>
+<button id="startBtn">Start Brushing</button>
 
-  <!-- About Section -->
-  <section id="about">
-    <h2>About Me</h2>
-    <p>Hi, I’m Hoka, the creator behind Noctivis. I work primarily with graphite and mixed media, exploring the contrasts of light and shadow. My goal is to create art that evokes emotion and tells a story beyond what the eye first sees.</p>
-  </section>
+<script>
+  const startBtn = document.getElementById('startBtn');
+  const timerDisplay = document.getElementById('timer');
+  const promptDisplay = document.getElementById('prompt');
 
-  <!-- Contact Section -->
-  <section id="contact">
-    <h2>Contact</h2>
-    <p>If you’d like to reach out for commissions, collaborations, or just to say hi, feel free to email me:</p>
-    <a href="mailto: hokadagoat@gmail.com">Email Me</a>
-  </section>
+  let totalTime = 120; // seconds
+  let interval;
 
-  <footer>
-    &copy; 2026 Noctivis. All rights reserved.
-  </footer>
+  const prompts = [
+    "Upper teeth",
+    "Lower teeth",
+    "Back teeth",
+    "Gums & finishing touches"
+  ];
+
+  function startTimer() {
+    let timeLeft = totalTime;
+    updatePrompt(0);
+    startBtn.disabled = true;
+
+    interval = setInterval(() => {
+      timeLeft--;
+      updateTimerDisplay(timeLeft);
+      const section = Math.floor((totalTime - timeLeft) / 30);
+      if ((totalTime - timeLeft) % 30 === 0 && timeLeft !== totalTime) {
+        updatePrompt(section);
+      }
+
+      if (timeLeft <= 0) {
+        clearInterval(interval);
+        promptDisplay.textContent = "Brushing complete";
+        startBtn.disabled = false;
+      }
+    }, 1000);
+  }
+
+  function updateTimerDisplay(seconds) {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    timerDisplay.textContent = `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+  }
+
+  function updatePrompt(section) {
+    if (section < prompts.length) {
+      promptDisplay.textContent = prompts[section];
+    }
+  }
+
+  startBtn.addEventListener('click', startTimer);
+</script>
 
 </body>
 </html>
