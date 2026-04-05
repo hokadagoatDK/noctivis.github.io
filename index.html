@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>BrushFlow</title>
 <style>
-  /* --- Reset & Body --- */
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
     font-family: 'Roboto', sans-serif;
@@ -18,8 +17,6 @@
     height: 100vh;
     transition: background 0.5s ease;
   }
-
-  /* --- Title --- */
   h1 {
     font-size: 2em;
     margin-bottom: 20px;
@@ -27,14 +24,11 @@
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
   }
-
-  /* --- Timer Circle --- */
   .timer-container {
     position: relative;
     width: 250px;
     height: 250px;
   }
-
   .circle {
     width: 100%;
     height: 100%;
@@ -48,7 +42,6 @@
     position: relative;
     overflow: hidden;
   }
-
   .progress-ring {
     position: absolute;
     top: 0; left: 0;
@@ -57,8 +50,6 @@
     background: conic-gradient(#C277FF 0deg, #8A2BE2 0deg);
     transition: background 0.3s linear;
   }
-
-  /* --- Text Prompt --- */
   .prompt {
     margin-top: 20px;
     font-size: 1.5em;
@@ -66,8 +57,6 @@
     color: #C277FF;
     transition: color 0.5s ease;
   }
-
-  /* --- Buttons --- */
   button {
     margin-top: 30px;
     padding: 15px 40px;
@@ -79,22 +68,16 @@
     cursor: pointer;
     transition: opacity 0.3s ease;
   }
-
-  button:hover {
-    opacity: 0.85;
-  }
-
+  button:hover { opacity: 0.85; }
 </style>
 </head>
 <body>
 
 <h1>BrushFlow</h1>
-
 <div class="timer-container">
   <div class="circle" id="timer">2:00</div>
   <div class="progress-ring" id="progressRing"></div>
 </div>
-
 <div class="prompt" id="prompt">Press Start to begin</div>
 <button id="startBtn">Start Brushing</button>
 
@@ -125,7 +108,6 @@
   function updatePrompt(section) {
     if (section < prompts.length) {
       promptDisplay.textContent = prompts[section];
-      // Slight color shift per section
       const color = section % 2 === 0 ? '#C277FF' : '#8A2BE2';
       promptDisplay.style.color = color;
     }
@@ -145,9 +127,7 @@
         updateTimerDisplay(timeLeft);
         updateProgressRing();
         const section = Math.floor((totalTime - timeLeft) / 30);
-        if ((totalTime - timeLeft) % 30 === 0 && timeLeft !== totalTime) {
-          updatePrompt(section);
-        }
+        if ((totalTime - timeLeft) % 30 === 0 && timeLeft !== totalTime) updatePrompt(section);
         if (timeLeft <= 0) {
           clearInterval(interval);
           promptDisplay.textContent = "Brushing complete";
@@ -160,7 +140,6 @@
       }, 1000);
       updatePrompt(0);
     } else {
-      // Stop brushing
       running = false;
       clearInterval(interval);
       startBtn.textContent = "Start Brushing";
